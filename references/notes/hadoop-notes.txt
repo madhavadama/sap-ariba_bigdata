@@ -1,0 +1,109 @@
+
+Introducton to Bigdata
+==========================
+What  is Bigdata?
+Why Bigdata?
+Challanges in Bigdata
+Bigdata Usecases
+Limitations of traditional BI architecture
+Solution to overcome limitations what we have with traditional BI arch
+
+Tech Stack to build Bigdata apps
+
+What is Hadoop?
+Different Hadoop Modes
+Hadoop Components
+Hadoop Architecture
+Hadoop Setup and Configuration
+
+HDFS CLI Commands
+	- List files
+	  hadoop fs -ls /
+	  
+	- Create directory
+	  hadoop fs -mkdir /
+	  
+	- Copy files from Local
+	  hadoop fs -put s3://bigdata/input /user/training/input
+	  hadoop fs -copyFromLocal /home/bigdata/input
+	  
+	- Copy files within HDFS
+	  hadoop fs -cp /user/training/input1 /user/training/input2
+	  
+	  Hadoop 
+		|_ HDFS
+		|_ S3
+		|_ Azure Blob
+		...
+	  
+	- Move files
+		hadoop fs -mv /user/training/input1 /user/training/input2
+		
+	- Remove directory
+		hadoop fs -rm /user/training/input1/input.txt
+		hadoop fs -rmdir /user/training/input1/
+		hadoop fs -rmr /user/training/input1/
+	
+	- View file content
+	   hadoop fs -cat /user/training/input1/input.txt
+	   
+	   
+	   
+	
+	...
+	
+HDFS TASK
+
+	STEP 1: Connect to bigdata-box and start HDFS
+			start-dfs.sh
+			
+    STEP 2: jps
+			NameNode
+			DataNode
+			SecondaryNameNode
+			
+		 
+			
+			#Verify Logs
+			/opt/hadoop/logs
+			
+			#If NameNode not started
+			stop-dfs.sh
+			hdfs namenode -format
+			start-dfs.sh
+
+	STEP 3: Listing HDFS root directory
+			hadoop fs -ls /
+			
+	STEP 4: Create directory structure as follows
+			/user/training/wordcount/input
+			
+			hadoop fs -mkdir /user
+			hadoop fs -mkdir /user/training
+			hadoop fs -mkdir /user/training/wordcount
+			hadoop fs -mkdir /user/training/wordcount/input
+			
+			hadoop fs -ls /user
+			hadoop fs -ls /user/training
+			hadoop fs -ls /user/
+			
+	STEP 5: Copy file from local to hdfs
+			cat ~/danskeit_bigdata/labs/dataset/wordcount/wordcount-input.txt
+			hadoop fs -put ~/danskeit_bigdata/labs/dataset/wordcount/wordcount-input.txt /user/training/wordcount/input
+			
+	STEP 6: View copied file details
+			hadoop fs -cat /user/training/wordcout/input/wordcount-input.txt
+			
+			
+			
+			
+			
+			
+			
+	
+
+	
+	
+	
+	
+	
