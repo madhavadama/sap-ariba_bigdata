@@ -1,0 +1,21 @@
+START COMMANDS
+===============
+#Hadoop HDFS
+start-dfs.sh
+
+#YARN
+start-yarn.sh
+
+#JobHistoryServer
+mr-jobhistory-daemon.sh start historyserver
+
+STOP COMMANDS
+=============
+#JobHistoryServer
+mr-jobhistory-daemon.sh stop historyserver
+
+#YARN
+stop-yarn.sh
+
+#Hadoop HDFS
+stop-dfs.sh

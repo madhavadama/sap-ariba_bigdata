@@ -62,9 +62,7 @@ HDFS TASK
 			DataNode
 			SecondaryNameNode
 			
-		 
-			
-			#Verify Logs
+		 	#Verify Logs
 			/opt/hadoop/logs
 			
 			#If NameNode not started
@@ -88,13 +86,11 @@ HDFS TASK
 			hadoop fs -ls /user/
 			
 	STEP 5: Copy file from local to hdfs
-			cat ~/danskeit_bigdata/labs/dataset/wordcount/wordcount-input.txt
-			hadoop fs -put ~/danskeit_bigdata/labs/dataset/wordcount/wordcount-input.txt /user/training/wordcount/input
+			cat ~/sap-ariba_bigdata/labs/dataset/wordcount/wordcount-input.txt
+			hadoop fs -put ~/sap-ariba_bigdata/labs/dataset/wordcount/wordcount-input.txt /user/training/wordcount/input
 			
 	STEP 6: View copied file details
-			hadoop fs -cat /user/training/wordcout/input/wordcount-input.txt
-			
-			
+			hadoop fs -cat /user/training/wordcout/input/wordcount-input.txt			
 			
 			
 			

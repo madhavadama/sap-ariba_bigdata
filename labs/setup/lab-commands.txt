@@ -1,0 +1,29 @@
+#Sharing Directories between local to VM
+/home/bigdatalab/sap-ariba_bigdata
+sudo mount -t vboxsf sap-ariba_bigdata /home/bigdatalab/sap-ariba_bigdata
+
+#SSH
+ssh -i [key file path] [hostname]
+
+#Java Installation
+sudo apt-get install openjdk-8-jdk
+java -version
+
+#Locate java installation directory
+whereis java
+
+#Eclipse Installation
+cd ~/Downloads
+curl http://ftp.kaist.ac.kr/eclipse/technology/epp/downloads/release/oxygen/3a/eclipse-jee-oxygen-3a-linux-gtk-x86_64.tar.gz -o eclipse-jee-oxygen.tar.gz
+sudo tar xzvf eclipse-jee-oxygen.tar.gz -C ~/.
+cd ~/eclipse	(=> verify installation)
+ 
+#Starting Eclipse
+cd ~/eclipse
+./eclipse
+
+#Listing listening ports
+sudo netstat -tulpen
+
+#Leave Safe Mode
+sudo -u hdfs dfsadmin -safemode leave
