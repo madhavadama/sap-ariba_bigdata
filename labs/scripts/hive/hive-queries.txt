@@ -42,7 +42,7 @@ FIELDS TERMINATED BY '\t'
 LINES TERMINATED BY '\n'
 LOCATION '/user/training/empmgmt/input';
 
-LOAD DATA LOCAL INPATH '/home/bigdatalab/danskeit_bigdata/labs/dataset/empmgmt/employee.txt' 
+LOAD DATA LOCAL INPATH '/home/bigdatalab/sap-ariba_bigdata/labs/dataset/empmgmt/employee.txt' 
 OVERWRITE INTO TABLE employee;
 
 ALTER TABLE name RENAME TO new_name
@@ -92,7 +92,7 @@ ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.JsonSerDe'
 STORED AS TEXTFILE;
 
 # Loading data from local file system
-LOAD DATA LOCAL INPATH '/home/ubuntu/danskeit_bigdata/labs/dataset/empmgmt/employee.json' 
+LOAD DATA LOCAL INPATH '/home/ubuntu/sap-ariba_bigdata/labs/dataset/empmgmt/employee.json' 
 OVERWRITE INTO TABLE employee_json;
 
 # Writing data to HDFS file system
@@ -126,7 +126,7 @@ INSERT INTO emp_orc SELECT * FROM emp_parquet;
 
 ## XML Data Processing
 # Add hivexmlserde jar into Hive path
-add jar /home/ubuntu/danskeit_bigdata/labs/jars/hivexmlserde-1.0.5.3.jar
+add jar /home/ubuntu/sap-ariba_bigdata/labs/jars/hivexmlserde-1.0.5.3.jar
 
 CREATE TABLE auctions(
 auctionDate string,
