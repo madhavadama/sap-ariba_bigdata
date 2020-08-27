@@ -1,0 +1,227 @@
+##Hive client connection
+
+$beeline
+#Hive Server needs to run to connect
+#!connect jdbc:hive2://localhost:10000 username password org.apache.hive.jdbc.HiveDriver
+
+#Connect without Hive Server
+!connect jdbc:hive2:// username password org.apache.hive.jdbc.HiveDriver
+
+show tables;
+
+## Hive Query Syntax
+
+# Database (Schema) creation
+CREATE SCHEMA training;
+
+# Table Creation
+CREATE [TEMPORARY] [EXTERNAL] TABLE [IF NOT EXISTS] [db_name.] table_name
+
+[(col_name data_type [COMMENT col_comment], ...)]
+[COMMENT table_comment]
+[ROW FORMAT row_format]
+[STORED AS file_format]
+
+# Hive Queries
+
+CREATE SCHEMA hive_training;
+
+CREATE TABLE IF NOT EXISTS employee ( eid int, name String,
+salary String, destination String)
+COMMENT 'Employee details'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+STORED AS TEXTFILE;
+
+CREATE EXTERNAL TABLE IF NOT EXISTS employee ( eid int, name String,
+salary String, destination String)
+COMMENT 'Employee details'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+LINES TERMINATED BY '\n'
+LOCATION '/user/training/empmgmt/input';
+
+LOAD DATA LOCAL INPATH '/home/bigdatalab/danskeit_bigdata/labs/dataset/empmgmt/employee.txt' 
+OVERWRITE INTO TABLE employee;
+
+ALTER TABLE name RENAME TO new_name
+ALTER TABLE name ADD COLUMNS (col_spec[, col_spec ...])
+ALTER TABLE name DROP [COLUMN] column_name
+ALTER TABLE name CHANGE column_name new_name new_type
+ALTER TABLE name REPLACE COLUMNS (col_spec[, col_spec ...])
+
+SELECT * FROM EMPLOYEE;
+SELECT * FROM EMPLOYEE WHERE SALARY >= 45000;
+SELECT COUNT(*) FROM EMPLOYEE;
+SELECT SUM(SALARY) FROM EMPLOYEE;
+
+DROP TABLE IF EXISTS employee;
+DROP SCHEMA training;
+
+## Partitioning Syntax
+
+ALTER TABLE table_name ADD [IF NOT EXISTS] PARTITION partition_spec
+[LOCATION 'location1'] partition_spec [LOCATION 'location2'] ...;
+
+partition_spec:
+: (p_column = p_col_value, p_column = p_col_value, ...)
+
+
+## Hive Wordcount example
+DROP TABLE IF EXISTS docs;
+
+CREATE TABLE docs (line STRING);
+
+LOAD DATA INPATH '/user/training/wordcount/input/wordcount-input.txt' OVERWRITE INTO TABLE docs;
+
+CREATE TABLE word_counts AS
+SELECT word, count(1) AS count FROM
+ (SELECT explode(split(line, '\\s')) AS word FROM docs) temp
+GROUP BY word
+ORDER BY word;
+
+SELECT * FROM word_counts;
+
+## JSON Data Processing
+
+CREATE TABLE IF NOT EXISTS employee_json ( eid int, name String,
+salary String, designation String)
+COMMENT 'Employee details'
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.JsonSerDe'
+STORED AS TEXTFILE;
+
+# Loading data from local file system
+LOAD DATA LOCAL INPATH '/home/ubuntu/danskeit_bigdata/labs/dataset/empmgmt/employee.json' 
+OVERWRITE INTO TABLE employee_json;
+
+# Writing data to HDFS file system
+INSERT OVERWRITE DIRECTORY '/user/training/empmgmt/output' SELECT * FROM employee_json;
+
+# Writing data to local file system
+INSERT OVERWRITE LOCAL DIRECTORY '/home/ubuntu/output' SELECT * FROM employee_json;
+
+# Writing data to Hive table
+INSERT OVERWRITE TABLE emp SELECT * FROM employee_json;
+
+# Writing data in different formats
+
+# Avro Format
+CREATE TABLE emp_avro STORED AS AVRO AS SELECT * FROM emp;
+
+# Parquet Format
+CREATE TABLE emp_parquet STORED AS PARQUET AS SELECT * FROM emp;
+
+# RC Format
+CREATE TABLE emp_rc STORED AS RCFILE AS SELECT * FROM emp;
+
+# ORC Format
+CREATE TABLE emp_orc STORED AS ORC AS SELECT * FROM emp;
+
+# Copy data from Avro to Parquet table
+INSERT INTO emp_parquet SELECT * FROM emp_avro;
+
+# Copy data from emp_parquet to ORC table
+INSERT INTO emp_orc SELECT * FROM emp_parquet;
+
+## XML Data Processing
+# Add hivexmlserde jar into Hive path
+add jar /home/ubuntu/danskeit_bigdata/labs/jars/hivexmlserde-1.0.5.3.jar
+
+CREATE TABLE auctions(
+auctionDate string,
+maturityDate string,
+maturityAmt double 
+)
+ROW FORMAT SERDE 'com.ibm.spss.hive.serde2.xml.XmlSerDe'
+WITH SERDEPROPERTIES (
+"column.xpath.auctionDate"="/AuctionAnnouncement/AuctionDate/text()",
+"column.xpath.maturityDate"="/AuctionAnnouncement/MaturityDate/text()",
+"column.xpath.maturityAmt"="/AuctionAnnouncement/MatureSecurityAmount/text()"
+)
+STORED AS
+INPUTFORMAT 'com.ibm.spss.hive.serde2.xml.XmlInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
+TBLPROPERTIES (
+"xmlinput.start"="<AuctionAnnouncement",
+"xmlinput.end"="</AuctionAnnouncement>"
+);
+
+######sample auctions xml input####
+<AuctionAnnouncement>
+	<AuctionDate>2008-04-28</AuctionDate>
+	<MaturityDate>2008-07-31</MaturityDate>
+	<MatureSecurityAmount>61989000000.0</MatureSecurityAmount>
+</AuctionAnnouncement>
+###########################
+
+# Fetch auctions
+SELECT * FROM auctions;
+
+CREATE TABLE customers(customer_id STRING, income BIGINT, demographics map<string,string>, financial map<string,string>)
+ROW FORMAT SERDE 'com.ibm.spss.hive.serde2.xml.XmlSerDe'
+WITH SERDEPROPERTIES (
+"column.xpath.customer_id"="/record/@customer_id",
+"column.xpath.income"="/record/income/text()",
+"column.xpath.demographics"="/record/demographics/*",
+"column.xpath.financial"="/record/financial/*"
+)
+STORED AS
+INPUTFORMAT 'com.ibm.spss.hive.serde2.xml.XmlInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.IgnoreKeyTextOutputFormat'
+TBLPROPERTIES (
+"xmlinput.start"="<record customer",
+"xmlinput.end"="</record>"
+);
+
+######sample customers xml input######################
+<records>
+	<record customer_id="100">
+		<income>75000</income>		
+		<demographics>
+			<gender>F</gender>
+			<agecat>1</agecat>
+			<edcat>1</edcat>
+			<jobcat>2</jobcat>
+			<empcat>2</empcat>
+			<retire>0</retire>
+			<jobsat>1</jobsat>
+			<marital>1</marital>
+			<spousedcat>1</spousedcat>
+			<residecat>4</residecat>
+			<homeown>0</homeown>
+			<hometype>2</hometype>
+			<addresscat>2</addresscat>
+		</demographics>
+		<financial>
+			<income>18</income>
+			<creddebt>1.003392</creddebt>
+			<othdebt>2.740608</othdebt>
+			<default>0</default>
+		</financial>
+	</record>
+</records>
+#########################################################
+
+#Fetch customers
+SELECT customer_id, income, demographics, financial FROM customers limit 1;
+
+#########################################################################
+
+## Log Data Processing
+
+CREATE TABLE apachelog (
+  host STRING,
+  identity STRING,
+  user STRING,
+  time STRING,
+  request STRING,
+  status STRING,
+  size STRING,
+  referer STRING,
+  agent STRING)
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.RegexSerDe'
+WITH SERDEPROPERTIES (
+  "input.regex" = "([^]*) ([^]*) ([^]*) (-|\\[^\\]*\\]) ([^ \"]*|\"[^\"]*\") (-|[0-9]*) (-|[0-9]*)(?: ([^ \"]*|\".*\") ([^ \"]*|\".*\"))?"
+)
+STORED AS TEXTFILE;

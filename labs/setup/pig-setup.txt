@@ -1,0 +1,21 @@
+#Pre-requisites:
+#java 1.8
+#hadoop 3.x.x
+
+#Download Pig	
+cd ~/Downloads
+curl https://downloads.apache.org/pig/pig-0.17.0/pig-0.17.0.tar.gz -o pig-0.17.0.tar.gz
+tar xzvf pig-0.17.0.tar.gz
+
+sudo mv pig-0.17.0 /opt/pig
+
+#PIG_HOME configuration
+sudo nano ~/.bashrc
+#############################
+export PIG_HOME=/opt/pig 
+export PATH=$PATH:$PIG_HOME/bin
+##############################################
+source ~/.bashrc			=> reloads the changes
+
+#Verify Pig Installation
+pig -version				=> should show pig version details

@@ -1,0 +1,24 @@
+#Pig Version
+pig -version
+
+#Pig Local Mode
+pig -x local
+
+#Pig MR Mode
+pig -x mapreduce
+
+#Grunt commands
+#List local files
+sh ls
+
+#List hdfs files
+fs -ls /
+
+#Show History of commands executed
+history
+
+#Clear Grunt shell
+clear
+
+#Quit from Grunt shell
+quit

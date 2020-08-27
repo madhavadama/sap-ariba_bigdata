@@ -1,0 +1,19 @@
+##Pig grunt shell
+
+$ pig -version			// prints version
+$ pig -x local			// local mode
+$ pig -x mapreduce		// mapreduce mode
+
+#Pig Wordcount Example
+lines = LOAD '/user/training/wordcount/input/wordcount-input.txt' AS (line:chararray); 
+words = FOREACH lines GENERATE FLATTEN(TOKENIZE(line)) as word; 
+grouped = GROUP words BY word; 
+wordcount = FOREACH grouped GENERATE group, COUNT(words); 
+DUMP wordcount;
+STORE wordcount INTO '/user/training/wordcount/output'
+
+#User ID extraction from Password file
+A = LOAD 'hdfs://localhost:9000/user/training/passwd' using PigStorage(':');  -- load the passwd file
+B = FOREACH A generate $0 as id;  -- extract the user IDs
+DUMP B;		-- print the results in the console
+STORE B into 'file:///home/ubuntu/id.out';  -- write the results to a file name id.out
