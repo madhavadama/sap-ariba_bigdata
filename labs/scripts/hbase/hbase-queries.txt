@@ -1,0 +1,77 @@
+#Create Table
+#create ‘<table name>’,’<column family>’ 
+create 'employee', 'personal data', 'professional data'
+
+#Describe Table
+describe 'employee'
+
+#List Tables
+list
+
+#Disable Table
+disable 'employee'
+disable_all 'r.*'
+
+#Enable Table
+enable ‘employee’
+
+#Alter Table
+alter 'employee','delete'⇒'professional'
+
+#Insert Data
+#put ’<table name>’,’row1’,’<colfamily:colname>’,’<value>’
+put 'employee','1','personal data:name','Anand'
+put 'employee','1','personal data:city','Bangalore'
+put 'employee','1','professional data:designation','Manager'
+put 'employee','1','professional data:salary','50000'
+
+#View Table Data
+#scan '<table name>'
+scan 'employee'
+
+#Update Data
+put 'employee','1','personal:city','Delhi'
+scan 'employee'
+
+#Read Data by RowID
+#get ’<table name>’,’row1’
+get 'employee', '1'
+
+#Read Data by Column
+#get 'table name', ‘rowid’, {COLUMN ⇒ ‘column family:column name ’}
+get 'emp', '1', {COLUMN ⇒ 'personal:name'}
+
+#Delete Specific Cell
+#delete ‘<table name>’, ‘<row>’, ‘<column name >’, ‘<time stamp>’
+delete 'employee', '1', 'personal data:city', 1417521848375
+
+#Delete All Cells
+#deleteall ‘<table name>’, ‘<row>’
+deleteall 'employee','1'
+scan 'employee'
+
+#Count Rows
+#count ‘<table name>’ 
+count 'employee'
+
+#Truncate Table Data
+#truncate 'table name'
+truncate 'employee'
+
+#Disable Table
+disable 'employee'
+
+#Drop Table
+drop ‘employee’
+
+#Create Namespace
+create_namespace 'my_ns'
+
+#create my_table in my_ns namespace
+create 'my_ns:my_table', 'fam'
+
+#drop namespace
+drop_namespace 'my_ns'
+
+#alter namespace
+alter_namespace 'my_ns', {METHOD => 'set', 'PROPERTY_NAME' => 'PROPERTY_VALUE'}
