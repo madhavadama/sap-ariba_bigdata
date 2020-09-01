@@ -24,6 +24,7 @@ Hadoop 1.x vs 2.x vs 3.x
 Hadoop Setup and Configuration
 
 HDFS
+=======
 	- Namenode		- Manages the metadata -> list of files, block details, replication, access details, ...
 	- Datanode		- Stores the data
 	- Secondary Namenode	- Backup of metadata. Default every one hour. Manually start.
@@ -78,13 +79,8 @@ HDFS CLI Commands
 	   hadoop fs -cat /user/training/input1/input.txt
 	   
 Map Reduce (MR)
-	
-	Input -> Input Split -> Map -> Shuffle ->     Reduce -> Output
-				K1,V1	 List(K2,V2)  K2,List(V2)  K3,V3
-			Pos,DataBlk
-
-			
-	
+===============	
+	Input -> Input Split -> Map -> Shuffle -> Reduce -> Output
 	   
 MR1
 	- Job Tracker
@@ -95,26 +91,45 @@ MR2/YARN
 	- Resource Manager (RM)
 		- Application Manager -> Cluster wide Resource Management / Allocation
 		- Scheduler -> Scheduling of MR Jobs
+			- Capacity Scheduler
+				- Multi tenant
+				- Reserves capacity for each tenant [organization/team]
+			- Fair Scheduler
+				- Ensures "fair" allocation for resources
+				
 	- Node Manager (NM)
 		- Managing the node level resources
 		- Sends resource stats to RM
 		- Provisioning the containers
+		
 	- App Master
 		- Manage the MR job life cycle
 		- Manages and Tracks the containers
 		- Negotiate with RM to allocate resources
 		- Request NM to provision the container
+		
 	- Container
 		- Abstraction of a resources to run Map/Reduce tasks
 		- CPU, Memory, Disk and Network
-		- 1 Core, 1 GB RAM
-		
-		- Map Task
-		- Reduce Task
-	
+		- Map/Reduct Task
+			
 	- Job History Server
+		
 	
-	...
+HDFS File Formats
+==================
+Text
+Sequence File
+Avro
+Parquet
+ORC
+
+Compression Techniques
+====================
+GZIP
+BZIP2
+LZO
+Snappy
 	
 MR Program Structure
 ====================
@@ -135,6 +150,23 @@ MR Program Structure
 		- reduce
 			- logic to do reduce operation
 			
+	- Combiner
+		- local reducers
+		
+	- Partitioner
+	
+	- Map Side Join
+	
+	- Reduce Side Join
+	
+	- Distributed Cache -> < 150 MB	
+	
+	- Counters
+		- File System Counters
+		- Job Counters
+		- MR Counters
+	
+			
 Execute MR Program
 ==================
 1) Prepare input data
@@ -142,52 +174,61 @@ Execute MR Program
 3) hadoop jar <jar-name> <main-class-name> <input-path> <output-path> -> submits MR program to YARN
 4) Verify the output
 
-HDFS TASK
+Wordcount MR Program
+====================
 
-	STEP 1: Connect to bigdata-box and start HDFS
-			start-dfs.sh
-			
-    STEP 2: jps
-			NameNode
-			DataNode
-			SecondaryNameNode
-			
-		 	#Verify Logs
-			/opt/hadoop/logs
-			
-			#If NameNode not started
-			stop-dfs.sh
-			hdfs namenode -format
-			start-dfs.sh
+STEP 1: Connect to bigdata-box vm and start HDFS
+		start-dfs.sh
+				
+STEP 2: jps
+		NameNode
+		DataNode
+		SecondaryNameNode
+		
+	 	#Verify Logs
+		/opt/hadoop/logs
+		
+		#If NameNode not started
+		stop-dfs.sh
+		hdfs namenode -format
+		start-dfs.sh
 
-	STEP 3: Listing HDFS root directory
-			hadoop fs -ls /
-			
-	STEP 4: Create directory structure as follows
-			/user/training/wordcount/input
-			
-			hadoop fs -mkdir /user
-			hadoop fs -mkdir /user/training
-			hadoop fs -mkdir /user/training/wordcount
-			hadoop fs -mkdir /user/training/wordcount/input
-			
-			hadoop fs -ls /user
-			hadoop fs -ls /user/training
-			hadoop fs -ls /user/
-			
-	STEP 5: Copy file from local to hdfs
-			cat ~/sap-ariba_bigdata/labs/dataset/wordcount/wordcount-input.txt
-			hadoop fs -put ~/sap-ariba_bigdata/labs/dataset/wordcount/wordcount-input.txt /user/training/wordcount/input
-			
-	STEP 6: View copied file details
-			hadoop fs -cat /user/training/wordcout/input/wordcount-input.txt
+STEP 3: Listing HDFS root directory
+		hadoop fs -ls /
+		
+STEP 4: Create directory structure as follows
+		/user/training/wordcount/input
+		
+		hadoop fs -mkdir /user
+		hadoop fs -mkdir /user/training
+		hadoop fs -mkdir /user/training/wordcount
+		hadoop fs -mkdir /user/training/wordcount/input
+		
+		hadoop fs -ls /user
+		hadoop fs -ls /user/training
+		hadoop fs -ls /user/
+		
+STEP 5: Copy file from local to hdfs
+		cat ~/sap-ariba_bigdata/labs/dataset/wordcount/wordcount-input.txt
+		hadoop fs -put ~/sap-ariba_bigdata/labs/dataset/wordcount/wordcount-input.txt /user/training/wordcount/input
+		
+STEP 6: View copied file details
+		hadoop fs -cat /user/training/wordcout/input/wordcount-input.txt
 
-	STEP 7: Write a MR program to do wordcount
-	
-	
-			
-			
-			
+STEP 7: Write a MR program to do Wordcount	
+
+STEP 8: Compile and package MR program as JAR
+
+STEP 9: Start YARN
+		start-yarn.sh
+		
+STEP 10:jps
+		ResourceManager
+		NodeManager
+		
+STEP 11: hadoop jar <jar-name> <main-class-name> <input-path> <output-path> -> submits MR program to YARN
+
+STEP 12: Verify the output		
 			
 			
 	

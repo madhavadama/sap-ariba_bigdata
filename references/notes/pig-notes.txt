@@ -1,0 +1,49 @@
+Pig
+	- What is Pig
+		- Data Flow Language for Data Analysis
+		- Pig Latin
+		- Procedural
+		
+	- MR vs Pig
+	- Pig Architecture
+		- Parser
+		- Optimizer
+		- Compiler
+		- Execution Engine
+		
+	- Modes
+		- Local
+		- MapReduce
+		
+	- Different Ways to Run
+		- Grunt
+		- Batch
+		- Embedded
+		
+		- pig -x local
+		- pig -x mapreduce
+		
+		- pig wordcount.pig
+	
+	- Data Types
+		- Primitive -> int, chararray, float, boolean, etc...
+		- Complex -> Atom, Tuple, Bag, Map
+		
+		{'empdetails',(100,'Anand','Bangalore'),{(101,'Viken','Bangalore'),(102,'Nawab','Bangalore')}}
+		[empid#100, name#Anand, location#Bangalore]
+	
+	- Pig Operators
+		- LOAD
+		- DUMP
+		- STORE
+		
+		- FOREACH
+		- GROUP <relation> By <field>
+		- FILER
+		- ORDER
+		- COGROUP
+		- CROSS
+		
+	- Pig built-in Functions
+	
+	- UDF (User Defined Functions)

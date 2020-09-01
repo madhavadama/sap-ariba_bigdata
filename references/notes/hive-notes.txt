@@ -1,0 +1,53 @@
+Hive
+	- What is Hive?
+		- Data Analysis Tool
+		- Structured Data
+		- Provides SQL like interface (HiveQL) to do analysis
+		- Declarative
+		
+	- Pig vs Hive
+	
+	- Hive vs RDBMS
+	
+	- Hive Architecture
+		- Hive Shell / Beeline
+		- Metastore -> Embedded, Local or Remote
+		- Driver
+		- Compiler
+		- Execution Runtime
+		
+	- Hive Datamodel
+		- Schema/Database
+		- Table
+			- Rows
+			- Columns
+			
+	- Data Types
+		- Primitive - tinyint,smallint,int,bigint,float,double,string,boolean
+		- Complex	- struct, map, array
+	
+	- DDL
+		- Create Schema/Table/View/Index
+		- Alter Schema/Table/View/Index
+		- Drop Schema/Table/View/Index
+		
+	- DML
+		- INSERT
+		- SELECT
+			- WHERE
+			- GROUP BY
+			- ORDER
+			- JOIN
+			- LIMIT
+	- Builtin Functions
+		
+	- LOAD DATA 'filepath' INTO 'table'
+	- INSERT DIRECTORY 'filepath' AS 'query'
+			
+	- Table Types
+		- Managed Table		=> Lifecyle managed by Hive
+		- External Table	=> Metadata managed by Hive and Table content managed by users/developers
+		- Partitioned Table
+		- Clustered/Bucketed Table
+
+	- UDF (User Defined Function) / UDAF (User Defined Aggregate Function)		
